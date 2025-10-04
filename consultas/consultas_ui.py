@@ -46,10 +46,12 @@ class ConsultasView(ttk.Frame):
                        background="#555", 
                        foreground="white")
         
-        # Variables para el autocompletado
+        # Variables para la búsqueda y autocompletado
         self._estudiantes_data: List[Tuple[int, str]] = []
         self._filtered_estudiantes: List[Tuple[int, str]] = []
         self._selected_estudiante_id: Optional[int] = None
+        self.suggestions_toplevel = None
+        self.suggestions_listbox = None
 
         self._build_header()
         self._build_layout()
@@ -57,6 +59,7 @@ class ConsultasView(ttk.Frame):
         self._build_section2(self.center_frame)
         self._build_section3(self.center_frame)
         self._load_estudiantes_data()
+        self._setup_search_events()
 
     def _build_header(self) -> None:
         """Construye el encabezado."""
@@ -112,12 +115,6 @@ class ConsultasView(ttk.Frame):
         self.entry_nombre = ttk.Entry(nombre_frame, width=20, font=("Segoe UI", 14))
         self.entry_nombre.grid(row=0, column=1, sticky="ew", pady=5, ipady=8)
         
-        # Toplevel para el listbox de sugerencias (siempre en el frente)
-        self.suggestions_toplevel = None
-        self.suggestions_listbox = None
-        
-        # Variable para almacenar la referencia al frame padre del nombre
-        self.nombre_frame = nombre_frame
 
         # Institución (solo lectura)
         institucion_frame = ttk.Frame(main_inputs_frame)
@@ -147,8 +144,6 @@ class ConsultasView(ttk.Frame):
         self.entry_telefono = ttk.Entry(telefono_frame, width=20, state="readonly", font=("Segoe UI", 14))
         self.entry_telefono.grid(row=0, column=1, sticky="ew", pady=5, ipady=8)
 
-        # Configurar eventos
-        self._setup_autocomplete_events()
 
     def _build_section2(self, parent: ttk.Frame) -> None:
         """Construye la sección 2 con la tabla de solvencia."""
@@ -387,8 +382,12 @@ class ConsultasView(ttk.Frame):
                                              relief="solid", borderwidth=1)
         self.promedio_value_label.grid(row=5, column=2, sticky="ew", padx=1, pady=1)
 
-    def _setup_autocomplete_events(self) -> None:
-        """Configura los eventos para el autocompletado."""
+    def _load_estudiantes_data(self) -> None:
+        """Carga los datos de estudiantes para la búsqueda."""
+        self._estudiantes_data = fetch_estudiantes_for_autocomplete("academia.db")
+
+    def _setup_search_events(self) -> None:
+        """Configura los eventos para la búsqueda y autocompletado."""
         # Eventos para el campo nombre
         self.entry_nombre.bind("<KeyRelease>", self._on_nombre_key_release)
         self.entry_nombre.bind("<KeyPress>", self._on_nombre_key_press)
@@ -398,10 +397,6 @@ class ConsultasView(ttk.Frame):
         # Evento para ocultar sugerencias al hacer clic en cualquier parte de la ventana
         self.bind("<Button-1>", self._on_window_click)
 
-    def _load_estudiantes_data(self) -> None:
-        """Carga los datos de estudiantes para el autocompletado."""
-        self._estudiantes_data = fetch_estudiantes_for_autocomplete("academia.db")
-
     def _on_nombre_key_release(self, event: tk.Event) -> None:
         """Maneja la liberación de teclas en el campo nombre."""
         # Ignorar teclas de navegación
@@ -409,15 +404,13 @@ class ConsultasView(ttk.Frame):
             return
         
         search_text = self.entry_nombre.get().strip()
-        print(f"DEBUG: Key release - search_text: '{search_text}'")  # Debug
         
         if len(search_text) >= 1:
             try:
                 self._filtered_estudiantes = search_estudiantes_by_name(search_text, "academia.db")
-                print(f"DEBUG: Filtered results: {self._filtered_estudiantes}")  # Debug
                 self._show_suggestions()
             except Exception as e:
-                print(f"DEBUG: Error in search: {e}")  # Debug
+                print(f"Error en búsqueda: {e}")
                 self._hide_suggestions()
         else:
             self._hide_suggestions()
@@ -435,7 +428,7 @@ class ConsultasView(ttk.Frame):
             self._navigate_suggestions(1)
             return "break"
         elif event.keysym == "Return":
-            self._hide_suggestions()  # Ocultar la lista primero
+            self._hide_suggestions()
             if self._filtered_estudiantes:
                 self._select_current_suggestion()
             else:
@@ -460,18 +453,23 @@ class ConsultasView(ttk.Frame):
         if widget != self.entry_nombre and (self.suggestions_listbox is None or widget != self.suggestions_listbox):
             self._hide_suggestions()
 
+    def _hide_suggestions(self) -> None:
+        """Oculta las sugerencias del listbox."""
+        if self.suggestions_toplevel is not None:
+            # Limpiar el contenido del listbox
+            if self.suggestions_listbox is not None:
+                self.suggestions_listbox.delete(0, tk.END)
+            # Ocultar el Toplevel
+            self.suggestions_toplevel.withdraw()
+
     def _show_suggestions(self) -> None:
         """Muestra las sugerencias en el listbox (estilo Google)."""
-        print(f"DEBUG: _show_suggestions called with {len(self._filtered_estudiantes)} results")  # Debug
-        
         if not self._filtered_estudiantes:
-            print("DEBUG: No filtered estudiantes, hiding suggestions")  # Debug
             self._hide_suggestions()
             return
             
         # Limitar a 5 sugerencias máximo (como Google)
         suggestions = self._filtered_estudiantes[:5]
-        print(f"DEBUG: Showing {len(suggestions)} suggestions")  # Debug
         
         # Crear el Toplevel si no existe
         if self.suggestions_toplevel is None:
@@ -484,16 +482,6 @@ class ConsultasView(ttk.Frame):
         
         # Posicionar el Toplevel debajo del campo nombre
         self._position_suggestions_overlay()
-        print("DEBUG: Listbox shown as overlay")  # Debug
-
-    def _hide_suggestions(self) -> None:
-        """Oculta las sugerencias del listbox."""
-        if self.suggestions_toplevel is not None:
-            # Limpiar el contenido del listbox
-            if self.suggestions_listbox is not None:
-                self.suggestions_listbox.delete(0, tk.END)
-            # Ocultar el Toplevel
-            self.suggestions_toplevel.withdraw()
     
     def _position_suggestions_overlay(self) -> None:
         """Posiciona el Toplevel de sugerencias debajo del campo nombre."""
@@ -603,6 +591,9 @@ class ConsultasView(ttk.Frame):
             
             # Buscar y mostrar los datos del estudiante
             self._load_estudiante_data(estudiante_id)
+
+
+
 
 
     def _load_estudiante_data(self, estudiante_id: int) -> None:
