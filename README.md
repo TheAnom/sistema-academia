@@ -1,10 +1,10 @@
 # Sistema de Gestión de Pagos y Notas - Academia
 
-## 📋 Descripción del Proyecto
+## Descripción del Proyecto
 
 Sistema de gestión académica desarrollado en Python con Tkinter que permite administrar estudiantes, pagos, notas y usuarios con un sistema de permisos robusto.
 
-## 🏗️ Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 python3-proyecto01/
@@ -36,38 +36,27 @@ python3-proyecto01/
 └── sistema/                  # Entorno virtual Python
 ```
 
-## 🚀 Instalación y Configuración
+## Instalación y Configuración
 
 ### Paso 1: Clonar o Descargar el Proyecto
 
 ```bash
 # Si tienes el proyecto en un repositorio
-git clone <url-del-repositorio>
+git clone https://github.com/TheAnom/sistema-academia.git
 cd python3-proyecto01
 
 # O simplemente navegar al directorio si ya lo tienes
 cd /ruta/a/tu/proyecto/python3-proyecto01
 ```
 
-### Paso 2: Activar el Entorno Virtual
-
-```bash
-# Activar el entorno virtual
-source sistema/bin/activate
-
-# En Windows:
-# sistema\Scripts\activate
-```
-
-### Paso 3: Verificar Dependencias
+### Paso 2: Verificar Dependencias
 
 El proyecto utiliza las siguientes librerías principales:
-- `tkinter` (incluido con Python)
-- `sqlite3` (incluido con Python)
-- `customtkinter` (ya instalado en el entorno virtual)
-- `PIL` (Pillow, ya instalado en el entorno virtual)
+- `tkinter` 
+- `sqlite3` 
 
-### Paso 4: Ejecutar la Aplicación
+
+### Paso 3: Ejecutar la Aplicación
 
 ```bash
 # Asegúrate de estar en el directorio raíz del proyecto
@@ -79,64 +68,63 @@ python3 main.py
 
 ## 🎯 Funcionalidades del Sistema
 
-### 🔐 Sistema de Autenticación
+### Sistema de Autenticación
 - **Login seguro** con validación de credenciales
 - **Sistema de roles** (Administrador, Usuario, etc.)
 - **Gestión de sesiones** con logout automático
 
-### 👥 Gestión de Usuarios
+### Gestión de Usuarios
 - **Crear usuarios** con roles específicos
 - **Modificar información** de usuarios existentes
 - **Eliminar usuarios** (con restricciones de seguridad)
 - **Protección especial** para usuario administrador principal
 
-### 🎓 Gestión de Estudiantes
+### Gestión de Estudiantes
 - **Registro de estudiantes** con datos completos
 - **Modificación de información** estudiantil
 - **Eliminación de registros** (con confirmación)
 - **Búsqueda y filtrado** por nombre
 - **Autocompletado** inteligente en campos de nombre
 
-### 💰 Gestión de Pagos
+### Gestión de Pagos
 - **Registro de pagos** por concepto
 - **Seguimiento de montos** y fechas
 - **Búsqueda por nombre** de estudiante
 - **Gestión de conceptos** de pago
 
-### 📊 Gestión de Notas
+### Gestión de Notas
 - **Registro de calificaciones** (hasta 4 notas por estudiante)
 - **Cálculo automático** de promedios
 - **Determinación de aprobación** (promedio >= 60)
 - **Modificación y eliminación** de notas
 
-### 🔍 Sistema de Consultas
+### Sistema de Consultas
 - **Consulta de solvencia** de exámenes
 - **Visualización de notas** por estudiante
 - **Búsqueda avanzada** con autocompletado
 - **Reportes de estado** académico
 
-## 🎨 Características de la Interfaz
+## Características de la Interfaz
 
-### 🌙 Tema Oscuro
+### Tema Oscuro
 - **Fondo principal:** `#333`
 - **Pestañas:** `#555` con texto blanco
 - **Botones:** Colores específicos por función
 - **Inputs:** Fondo `#444` con texto blanco
 
-### 🎨 Colores de Botones
+### Colores de Botones
 - **Eliminar:** Rojo ligero (`#d32f2f`)
 - **Guardar:** Verde (`#4caf50`)
 - **Modificar:** Naranja ligero (`#ff9800`)
 - **Salir:** Gris pastel (`#9e9e9e`)
 - **Cerrar sesión:** Azul gris (`#607d8b`)
 
-### 📱 Diseño Responsivo
-- **Botones uniformes:** Todos con `width=15` y fuente tamaño 12
-- **Inputs consistentes:** Fuente tamaño 14 con altura aumentada
-- **Tablas optimizadas:** Texto tamaño 14 con filas más altas
-- **Layout adaptativo:** Se ajusta al tamaño de ventana
+### Diseño Responsivo
+- **Botones uniformes**
+- **Inputs consistentes**
+- **Tablas optimizadas**
 
-## 🗄️ Base de Datos
+## Base de Datos
 
 ### Estructura de Tablas
 
@@ -179,7 +167,9 @@ python3 main.py
 - aprobado (INTEGER)
 ```
 
-## 🔧 Configuración Avanzada
+![alt](./er.png)
+
+## Configuraciónes
 
 ### Personalización de Estilos
 
@@ -190,27 +180,29 @@ Para modificar los colores del sistema, edita el archivo `main.py` en la funció
 style.configure("TNotebook", background="#tu_color")
 
 # Cambiar color de botones
-style.configure("Save.TButton", background="#tu_color_verde")
-style.configure("Delete.TButton", background="#tu_color_rojo")
+style.configure("Save.TButton", background="#tu_color")
+style.configure("Delete.TButton", background="#tu_color")
 ```
+
+Tu eliges los color que mas te gusten es cuestrion de gustos.
 
 ### Configuración de Base de Datos
 
 Las bases de datos se crean automáticamente. Para resetear:
 
 ```bash
-# Eliminar bases de datos existentes
-rm academia.db login.db
+# Puedes eliminar la base de datos existente
+rm academia.db
 
 # Ejecutar la aplicación para recrearlas
 python main.py
 ```
 
-## 🛡️ Sistema de Permisos
+## Sistema de Permisos
 
 ### Roles Disponibles
-- **Administrador:** Acceso completo a todas las funciones
-- **Usuario:** Acceso limitado según configuración
+- **administrador:** Acceso completo a todas las funciones
+- **docente_suplente:** Acceso limitado
 
 ### Configuración de Permisos
 
@@ -226,7 +218,7 @@ def has_action_permission(usuario_id: int, action: str, db_path: str = "academia
     pass
 ```
 
-## 🐛 Solución de Problemas
+## Solución a algunos porsibles probelmas que se puedan encontrar.
 
 ### Error: "command not found: python"
 ```bash
@@ -258,7 +250,7 @@ lsof academia.db
 - Comprobar permisos de lectura del archivo
 - Verificar formato de imagen (PNG recomendado)
 
-## 📝 Uso del Sistema
+## Uso del Sistema
 
 ### 1. Iniciar Sesión
 1. Ejecutar `python main.py`
@@ -287,7 +279,7 @@ lsof academia.db
 2. Buscar estudiante por nombre
 3. Ver solvencia y notas
 
-## 🔄 Actualizaciones y Mantenimiento
+## Actualizaciones y Mantenimiento
 
 ### Backup de Base de Datos
 ```bash
@@ -304,25 +296,10 @@ source sistema/bin/activate
 # Actualizar pip
 pip install --upgrade pip
 
-# Actualizar paquetes específicos
-pip install --upgrade customtkinter pillow
 ```
-
-## 📞 Soporte
-
-Para reportar problemas o solicitar nuevas funcionalidades:
-
-1. **Verificar** que el problema no esté en la sección de solución de problemas
-2. **Documentar** el error con pasos para reproducirlo
-3. **Incluir** información del sistema operativo y versión de Python
-4. **Adjuntar** logs de error si están disponibles
-
-## 📄 Licencia
-
-Este proyecto es de uso educativo y académico. Todos los derechos reservados.
 
 ---
 
-**Desarrollado con ❤️ usando Python y Tkinter**
+**Desarrollado usando Python y Tkinter**
 
 *Última actualización: 03/10/2025*
