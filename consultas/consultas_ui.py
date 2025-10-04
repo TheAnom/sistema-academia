@@ -164,9 +164,6 @@ class ConsultasView(ttk.Frame):
         content_frame = ttk.Frame(section2_frame)
         content_frame.pack(fill=tk.X, padx=20)
         
-        # Subtítulo de la sección
-        ttk.Label(content_frame, text="Estado de Solvencia de Meses", 
-                 font=("Segoe UI", 14, "bold")).pack(pady=(0, 10))
         
         # Frame para la tabla
         table_frame = ttk.Frame(content_frame)
