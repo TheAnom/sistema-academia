@@ -14,14 +14,7 @@ class LoginView(ttk.Frame):
         super().__init__(parent)
         self.on_success = on_success
 
-        # Configurar estilo para botones grandes
-        style = ttk.Style()
-        style.configure("Large.TButton", 
-                       font=("Segoe UI", 18),
-                       background="#555", 
-                       foreground="white")
-        style.map("Large.TButton",
-                  background=[("active", "#666"), ("pressed", "#444")])
+        # Los estilos de botones se configuran globalmente en main.py
 
         self._center_container = ttk.Frame(self)
         self._center_container.place(relx=0.5, rely=0.5, anchor="center")
@@ -35,13 +28,13 @@ class LoginView(ttk.Frame):
         ttk.Label(self._center_container, text="Login", font=("Segoe UI", 24, "bold")).pack(pady=(0, 8))
 
         # Inputs
-        self.entry_usuario = ttk.Entry(self._center_container, width=30, font=("Segoe UI", 18))
+        self.entry_usuario = ttk.Entry(self._center_container, width=25, font=("Segoe UI", 16))
         self._init_placeholder(self.entry_usuario, "Usuario")
-        self.entry_usuario.pack(pady=6, ipady=8)
+        self.entry_usuario.pack(pady=6, ipady=10)
 
-        self.entry_contrasena = ttk.Entry(self._center_container, width=30, show="", font=("Segoe UI", 18))
+        self.entry_contrasena = ttk.Entry(self._center_container, width=25, show="", font=("Segoe UI", 16))
         self._init_placeholder(self.entry_contrasena, "Contrasena")
-        self.entry_contrasena.pack(pady=6, ipady=8)
+        self.entry_contrasena.pack(pady=6, ipady=10)
 
         # Botones
         btns = ttk.Frame(self._center_container)

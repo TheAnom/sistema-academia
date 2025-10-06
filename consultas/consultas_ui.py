@@ -26,25 +26,12 @@ class ConsultasView(ttk.Frame):
         # Configure the frame to expand and fill the available space
         self.pack(fill=tk.BOTH, expand=True)
         
-        # Configurar estilos para fuente 14
+        # Los estilos de botones se configuran globalmente en main.py
         style = ttk.Style()
-        style.configure("Large.TButton", 
-                       font=("Segoe UI", 14),
-                       background="#555", 
-                       foreground="white")
-        style.map("Large.TButton",
-                  background=[("active", "#666"), ("pressed", "#444")])
         
-        style.configure("Large.TTreeview", 
-                       font=("Segoe UI", 14), 
-                       rowheight=35,
-                       background="#444", 
-                       foreground="white",
-                       fieldbackground="#444")
-        style.configure("Large.TTreeview.Heading", 
-                       font=("Segoe UI", 14, "bold"),
-                       background="#555", 
-                       foreground="white")
+        # Configurar solo fuente para Treeview (tablas) - sin colores de fondo
+        style.configure("Large.TTreeview", font=("Segoe UI", 14))
+        style.configure("Large.TTreeview.Heading", font=("Segoe UI", 14, "bold"))
         
         # Variables para la búsqueda y autocompletado
         self._estudiantes_data: List[Tuple[int, str]] = []
@@ -65,7 +52,7 @@ class ConsultasView(ttk.Frame):
         """Construye el encabezado."""
         header = ttk.Frame(self)
         header.pack(fill=tk.X, padx=12, pady=12)
-        ttk.Label(header, text="Consultar Datos", font=("Segoe UI", 28, "bold")).pack()
+        ttk.Label(header, text="Consultar Datos", font=("Segoe UI", 16, "bold")).pack()
 
     def _build_layout(self) -> None:
         """Construye el layout principal."""
@@ -84,7 +71,7 @@ class ConsultasView(ttk.Frame):
         section_frame.pack(pady=20, fill=tk.X)
         
         # Título de la sección
-        title_label = ttk.Label(section_frame, text="Datos del Estudiante", font=("Segoe UI", 14, "bold"))
+        title_label = ttk.Label(section_frame, text="Datos del Estudiante", font=("Segoe UI", 12, "bold"))
         title_label.pack(anchor="w", pady=(0, 8))
         
         # Frame para el contenido
@@ -107,42 +94,24 @@ class ConsultasView(ttk.Frame):
 
         # Fila 1: Nombre e Institución
         # Nombre (con autocompletado)
-        nombre_frame = ttk.Frame(main_inputs_frame)
-        nombre_frame.grid(row=0, column=0, sticky="ew", padx=(0, 10), pady=5)
-        nombre_frame.columnconfigure(1, weight=1)
+        self.entry_nombre = ttk.Entry(main_inputs_frame, width=20, font=("Segoe UI", 14))
+        self.entry_nombre.grid(row=0, column=0, sticky="ew", padx=(0, 10), pady=5, ipady=8)
         
-        ttk.Label(nombre_frame, text="Nombre:", font=("Segoe UI", 14)).grid(row=0, column=0, sticky="w", pady=5, padx=(0, 10))
-        self.entry_nombre = ttk.Entry(nombre_frame, width=20, font=("Segoe UI", 14))
-        self.entry_nombre.grid(row=0, column=1, sticky="ew", pady=5, ipady=8)
-        
+        # Agregar texto "Nombre" como contenido inicial
+        self.entry_nombre.insert(0, "Nombre")
 
         # Institución (solo lectura)
-        institucion_frame = ttk.Frame(main_inputs_frame)
-        institucion_frame.grid(row=0, column=1, sticky="ew", padx=(10, 0), pady=5)
-        institucion_frame.columnconfigure(1, weight=1)
-        
-        ttk.Label(institucion_frame, text="Institución:", font=("Segoe UI", 14)).grid(row=0, column=0, sticky="w", pady=5, padx=(0, 10))
-        self.entry_institucion = ttk.Entry(institucion_frame, width=20, state="readonly", font=("Segoe UI", 14))
-        self.entry_institucion.grid(row=0, column=1, sticky="ew", pady=5, ipady=8)
+        self.entry_institucion = ttk.Entry(main_inputs_frame, width=20, state="readonly", font=("Segoe UI", 14))
+        self.entry_institucion.grid(row=0, column=1, sticky="ew", padx=(10, 0), pady=5, ipady=8)
 
         # Fila 2: Grado y Teléfono
         # Grado (solo lectura)
-        grado_frame = ttk.Frame(main_inputs_frame)
-        grado_frame.grid(row=1, column=0, sticky="ew", padx=(0, 10), pady=5)
-        grado_frame.columnconfigure(1, weight=1)
-        
-        ttk.Label(grado_frame, text="Grado:", font=("Segoe UI", 14)).grid(row=0, column=0, sticky="w", pady=5, padx=(0, 10))
-        self.entry_grado = ttk.Entry(grado_frame, width=20, state="readonly", font=("Segoe UI", 14))
-        self.entry_grado.grid(row=0, column=1, sticky="ew", pady=5, ipady=8)
+        self.entry_grado = ttk.Entry(main_inputs_frame, width=20, state="readonly", font=("Segoe UI", 14))
+        self.entry_grado.grid(row=1, column=0, sticky="ew", padx=(0, 10), pady=5, ipady=8)
 
         # Teléfono (solo lectura)
-        telefono_frame = ttk.Frame(main_inputs_frame)
-        telefono_frame.grid(row=1, column=1, sticky="ew", padx=(10, 0), pady=5)
-        telefono_frame.columnconfigure(1, weight=1)
-        
-        ttk.Label(telefono_frame, text="Teléfono:", font=("Segoe UI", 14)).grid(row=0, column=0, sticky="w", pady=5, padx=(0, 10))
-        self.entry_telefono = ttk.Entry(telefono_frame, width=20, state="readonly", font=("Segoe UI", 14))
-        self.entry_telefono.grid(row=0, column=1, sticky="ew", pady=5, ipady=8)
+        self.entry_telefono = ttk.Entry(main_inputs_frame, width=20, state="readonly", font=("Segoe UI", 14))
+        self.entry_telefono.grid(row=1, column=1, sticky="ew", padx=(10, 0), pady=5, ipady=8)
 
 
     def _build_section2(self, parent: ttk.Frame) -> None:
@@ -248,12 +217,12 @@ class ConsultasView(ttk.Frame):
         # Botón Cerrar Sesión
         self.btn_cerrar_sesion = ttk.Button(buttons_frame, text="Cerrar Sesión", 
                                            command=self._on_cerrar_sesion_click, style="Logout.TButton")
-        self.btn_cerrar_sesion.pack(side=tk.LEFT, padx=(0, 10), ipady=8)
+        self.btn_cerrar_sesion.pack(side=tk.LEFT, padx=(0, 10), ipady=4)
         
         # Botón Salir
         self.btn_salir = ttk.Button(buttons_frame, text="Salir", 
                                    command=self._on_salir_click, style="Exit.TButton")
-        self.btn_salir.pack(side=tk.LEFT, ipady=8)
+        self.btn_salir.pack(side=tk.LEFT, ipady=4)
 
     def _build_exam_solvency_box(self, parent: ttk.Frame) -> None:
         """Construye el cuadro de Solvencia de Exámenes."""

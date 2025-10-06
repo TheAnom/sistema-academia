@@ -41,50 +41,16 @@ class IngresosView(ttk.Frame):
         self._usuario_id = usuario_id or 0
         self.on_logout_callback = on_logout_callback
 
-        # Configurar estilo para botones con fuente 14
+        # Los estilos de botones se configuran globalmente en main.py
         style = ttk.Style()
-        style.configure("Large.TButton", 
-                       font=("Segoe UI", 12),
-                       background="#555", 
-                       foreground="white")
-        style.map("Large.TButton",
-                  background=[("active", "#666"), ("pressed", "#444")])
         
-        # Configurar estilos para inputs
-        style.configure("Large.TEntry", 
-                       font=("Segoe UI", 14),
-                       fieldbackground="#444", 
-                       foreground="white",
-                       borderwidth=1,
-                       insertcolor="white")
-        style.map("Large.TEntry",
-                  fieldbackground=[("focus", "#555"), ("!focus", "#444")],
-                  foreground=[("focus", "white"), ("!focus", "white")])
+        # Configurar solo fuente para inputs - sin colores de fondo
+        style.configure("Large.TEntry", font=("Segoe UI", 18))
+        style.configure("Large.TCombobox", font=("Segoe UI", 18))
         
-        # Configurar estilos para combobox (listas) - fondo #333 y texto blanco
-        style.configure("Large.TCombobox", 
-                       font=("Segoe UI", 14),
-                       fieldbackground="#333", 
-                       foreground="white",
-                       borderwidth=1,
-                       insertcolor="white")
-        style.map("Large.TCombobox",
-                  fieldbackground=[("focus", "#444"), ("!focus", "#333"), ("readonly", "#333")],
-                  foreground=[("focus", "white"), ("!focus", "white"), ("readonly", "white")],
-                  selectbackground=[("focus", "#555")],
-                  selectforeground=[("focus", "white")])
-        
-        # Configurar fuente para Treeview (tablas)
-        style.configure("Large.Treeview", 
-                       font=("Segoe UI", 14), 
-                       rowheight=35,
-                       background="#444", 
-                       foreground="white",
-                       fieldbackground="#444")
-        style.configure("Large.Treeview.Heading", 
-                       font=("Segoe UI", 14, "bold"),
-                       background="#555", 
-                       foreground="white")
+        # Configurar solo fuente para Treeview (tablas) - sin colores de fondo
+        style.configure("Large.Treeview", font=("Segoe UI", 18), rowheight=40)
+        style.configure("Large.Treeview.Heading", font=("Segoe UI", 18, "bold"))
         
         # Variables para filtros de tablas
         self._all_students_data: List[tuple] = []
@@ -102,7 +68,7 @@ class IngresosView(ttk.Frame):
         header = ttk.Frame(self)
         header.pack(fill=tk.X, padx=16, pady=12)
 
-        title = ttk.Label(header, text="Ingresos", font=("Segoe UI", 32, "bold"))
+        title = ttk.Label(header, text="Ingresos", font=("Segoe UI", 18, "bold"))
         title.pack(side=tk.LEFT)
 
     def _build_layout(self) -> None:
@@ -132,20 +98,20 @@ class IngresosView(ttk.Frame):
         students_section.grid(row=0, column=0, sticky="nsew", pady=(0, 6))
         
         # Título de la sección
-        students_title = ttk.Label(students_section, text="Estudiantes", font=("Segoe UI", 14, "bold"))
+        students_title = ttk.Label(students_section, text="Estudiantes", font=("Segoe UI", 20, "bold"))
         students_title.pack(anchor="w", pady=(0, 8))
         
         # Frame para búsqueda de estudiantes
         students_search_frame = ttk.Frame(students_section)
         students_search_frame.pack(fill=tk.X, pady=(0, 8))
         
-        ttk.Label(students_search_frame, text="Buscar:", font=("Segoe UI", 12)).pack(side=tk.LEFT, padx=(0, 5))
-        self.students_search_entry = ttk.Entry(students_search_frame, style="Large.TEntry", width=20)
+        ttk.Label(students_search_frame, text="Buscar:", font=("Segoe UI", 14)).pack(side=tk.LEFT, padx=(0, 5))
+        self.students_search_entry = ttk.Entry(students_search_frame, width=15)
         self.students_search_entry.pack(side=tk.LEFT, padx=(0, 5))
         self.students_search_entry.bind("<KeyRelease>", self._on_students_search)
         
         ttk.Button(students_search_frame, text="Limpiar", command=self._clear_students_search, 
-                  width=15, style="Large.TButton").pack(side=tk.LEFT, padx=(5, 0))
+                  width=12).pack(side=tk.LEFT, padx=(5, 0))
         
         # Frame para la tabla
         students_table_frame = ttk.Frame(students_section)

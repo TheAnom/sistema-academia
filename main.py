@@ -64,94 +64,44 @@ def create_main_window() -> tk.Tk:
     root = tk.Tk()
     root.title("Gestión de Pagos y Notas")
     
+    # Configurar DPI awareness para Windows
+    try:
+        from ctypes import windll
+        windll.shcore.SetProcessDpiAwareness(1)
+    except:
+        pass
+    
     # Configurar colores del sistema
     style = ttk.Style()
     
-    # Configurar colores para las pestañas
-    style.configure("TNotebook", background="#333")
-    style.configure("TNotebook.Tab", 
-                   background="#555", 
-                   foreground="white",
-                   padding=[20, 10])
-    style.map("TNotebook.Tab",
-              background=[("selected", "#333"), ("active", "#666")],
-              foreground=[("selected", "white"), ("active", "white")])
+    # Configurar solo fuente para las pestañas - sin colores de fondo
+    style.configure("TNotebook.Tab", font=("Segoe UI", 10))
     
     # Configurar colores para frames principales
     style.configure("TFrame", background="#333")
     
     # Configurar colores para labels
-    style.configure("TLabel", background="#333", foreground="white")
+    style.configure("TLabel", background="#333", foreground="white", font=("Segoe UI", 9))
     
-    # Configurar colores para botones
-    style.configure("TButton", 
-                   background="#555", 
-                   foreground="white",
-                   borderwidth=1)
-    style.map("TButton",
-              background=[("active", "#666"), ("pressed", "#444")])
+    # Configurar solo fuente para botones - sin colores de fondo
+    style.configure("TButton", font=("Segoe UI", 9))
+    style.configure("Delete.TButton", font=("Segoe UI", 9))
+    style.configure("Save.TButton", font=("Segoe UI", 9))
+    style.configure("Edit.TButton", font=("Segoe UI", 9))
+    style.configure("Exit.TButton", font=("Segoe UI", 9))
+    style.configure("Logout.TButton", font=("Segoe UI", 9))
+    style.configure("Info.TButton", font=("Segoe UI", 9))
+    style.configure("Large.TButton", font=("Segoe UI", 9))
     
-    # Estilos específicos para botones según función
-    # Botones de eliminar - rojo ligero
-    style.configure("Delete.TButton", 
-                   background="#d32f2f", 
-                   foreground="white",
-                   borderwidth=1)
-    style.map("Delete.TButton",
-              background=[("active", "#f44336"), ("pressed", "#b71c1c")])
+    # Configurar solo fuente para entries - sin colores de fondo
+    style.configure("TEntry", font=("Segoe UI", 9))
     
-    # Botones de guardar - verde
-    style.configure("Save.TButton", 
-                   background="#4caf50", 
-                   foreground="white",
-                   borderwidth=1)
-    style.map("Save.TButton",
-              background=[("active", "#66bb6a"), ("pressed", "#388e3c")])
+    # Configurar solo fuente para comboboxes - sin colores de fondo
+    style.configure("TCombobox", font=("Segoe UI", 9))
     
-    # Botones de modificar - anaranjado ligero
-    style.configure("Edit.TButton", 
-                   background="#ff9800", 
-                   foreground="white",
-                   borderwidth=1)
-    style.map("Edit.TButton",
-              background=[("active", "#ffb74d"), ("pressed", "#f57c00")])
-    
-    # Botones de salir - color pastel que combine
-    style.configure("Exit.TButton", 
-                   background="#9e9e9e", 
-                   foreground="white",
-                   borderwidth=1)
-    style.map("Exit.TButton",
-              background=[("active", "#bdbdbd"), ("pressed", "#757575")])
-    
-    # Botones de cerrar sesión - color que combine
-    style.configure("Logout.TButton", 
-                   background="#607d8b", 
-                   foreground="white",
-                   borderwidth=1)
-    style.map("Logout.TButton",
-              background=[("active", "#78909c"), ("pressed", "#455a64")])
-    
-    # Configurar colores para entries
-    style.configure("TEntry", 
-                   fieldbackground="#444", 
-                   foreground="white",
-                   borderwidth=1)
-    
-    # Configurar colores para comboboxes
-    style.configure("TCombobox", 
-                   fieldbackground="#444", 
-                   foreground="white",
-                   borderwidth=1)
-    
-    # Configurar colores para treeviews (tablas)
-    style.configure("Treeview", 
-                   background="#444", 
-                   foreground="white",
-                   fieldbackground="#444")
-    style.configure("Treeview.Heading", 
-                   background="#555", 
-                   foreground="white")
+    # Configurar solo fuente para treeviews (tablas) - sin colores de fondo
+    style.configure("Treeview", font=("Segoe UI", 9))
+    style.configure("Treeview.Heading", font=("Segoe UI", 9, "bold"))
     
     # Maximiza/ajusta a pantalla disponible
     try:

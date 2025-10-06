@@ -19,26 +19,12 @@ class UsuariosView(ttk.Frame):
         super().__init__(parent)
         self.on_logout_callback = on_logout_callback
         
-        # Configurar estilo para botones con fuente 14
+        # Los estilos de botones se configuran globalmente en main.py
         style = ttk.Style()
-        style.configure("Large.TButton", 
-                       font=("Segoe UI", 14),
-                       background="#555", 
-                       foreground="white")
-        style.map("Large.TButton",
-                  background=[("active", "#666"), ("pressed", "#444")])
         
-        # Configurar fuente para Treeview (tablas)
-        style.configure("Large.TTreeview", 
-                       font=("Segoe UI", 14), 
-                       rowheight=35,
-                       background="#444", 
-                       foreground="white",
-                       fieldbackground="#444")
-        style.configure("Large.TTreeview.Heading", 
-                       font=("Segoe UI", 14, "bold"),
-                       background="#555", 
-                       foreground="white")
+        # Configurar solo fuente para Treeview (tablas) - sin colores de fondo
+        style.configure("Large.TTreeview", font=("Segoe UI", 18), rowheight=40)
+        style.configure("Large.TTreeview.Heading", font=("Segoe UI", 18, "bold"))
         
         # Configure the frame to expand and fill the available space
         self.pack(fill=tk.BOTH, expand=True)
@@ -52,7 +38,7 @@ class UsuariosView(ttk.Frame):
         """Construye el encabezado."""
         header = ttk.Frame(self)
         header.pack(fill=tk.X, padx=12, pady=12)
-        ttk.Label(header, text="Gestión Usuario", font=("Segoe UI", 32, "bold")).pack()
+        ttk.Label(header, text="Gestión Usuario", font=("Segoe UI", 26, "bold")).pack()
 
     def _build_layout(self) -> None:
         """Construye el layout principal con dos columnas."""
@@ -82,26 +68,26 @@ class UsuariosView(ttk.Frame):
         center_frame.place(relx=0.5, rely=0.5, anchor="center")
 
         # Título "Administración"
-        ttk.Label(center_frame, text="Administración", font=("Segoe UI", 14, "bold")).pack(pady=(0, 20))
+        ttk.Label(center_frame, text="Administración", font=("Segoe UI", 18, "bold")).pack(pady=(0, 15))
 
         # Inputs del formulario
         inputs_frame = ttk.Frame(center_frame)
-        inputs_frame.pack(pady=(0, 20))
+        inputs_frame.pack(pady=(0, 15))
 
         # Nombre
-        ttk.Label(inputs_frame, text="Nombre:", font=("Segoe UI", 14)).grid(row=0, column=0, sticky="w", pady=5)
-        self.entry_nombre = ttk.Entry(inputs_frame, width=25, font=("Segoe UI", 14))
-        self.entry_nombre.grid(row=0, column=1, sticky="ew", pady=5, padx=(10, 0), ipady=8)
+        ttk.Label(inputs_frame, text="Nombre:", font=("Segoe UI", 14)).grid(row=0, column=0, sticky="w", pady=4)
+        self.entry_nombre = ttk.Entry(inputs_frame, width=20, font=("Segoe UI", 14))
+        self.entry_nombre.grid(row=0, column=1, sticky="ew", pady=4, padx=(10, 0), ipady=8)
 
         # Contraseña
-        ttk.Label(inputs_frame, text="Contraseña:", font=("Segoe UI", 14)).grid(row=1, column=0, sticky="w", pady=5)
-        self.entry_contrasena = ttk.Entry(inputs_frame, width=25, show="*", font=("Segoe UI", 14))
-        self.entry_contrasena.grid(row=1, column=1, sticky="ew", pady=5, padx=(10, 0), ipady=8)
+        ttk.Label(inputs_frame, text="Contraseña:", font=("Segoe UI", 14)).grid(row=1, column=0, sticky="w", pady=4)
+        self.entry_contrasena = ttk.Entry(inputs_frame, width=20, show="*", font=("Segoe UI", 14))
+        self.entry_contrasena.grid(row=1, column=1, sticky="ew", pady=4, padx=(10, 0), ipady=8)
 
         # Rol
-        ttk.Label(inputs_frame, text="Rol:", font=("Segoe UI", 14)).grid(row=2, column=0, sticky="w", pady=5)
-        self.combo_rol = ttk.Combobox(inputs_frame, width=22, state="readonly", font=("Segoe UI", 14))
-        self.combo_rol.grid(row=2, column=1, sticky="ew", pady=5, padx=(10, 0), ipady=8)
+        ttk.Label(inputs_frame, text="Rol:", font=("Segoe UI", 14)).grid(row=2, column=0, sticky="w", pady=4)
+        self.combo_rol = ttk.Combobox(inputs_frame, width=18, state="readonly", font=("Segoe UI", 14))
+        self.combo_rol.grid(row=2, column=1, sticky="ew", pady=4, padx=(10, 0), ipady=8)
 
         # Configurar columnas
         inputs_frame.columnconfigure(1, weight=1)
@@ -118,12 +104,12 @@ class UsuariosView(ttk.Frame):
             buttons_frame.columnconfigure(i, weight=1)
 
         # Fila 1: Guardar, Eliminar, Guardar Cambios
-        ttk.Button(buttons_frame, text="Guardar", command=self._on_guardar, style="Save.TButton").grid(row=0, column=0, sticky="ew", padx=2, pady=4, ipady=8)
-        ttk.Button(buttons_frame, text="Eliminar", command=self._on_eliminar, style="Delete.TButton").grid(row=0, column=1, sticky="ew", padx=2, pady=4, ipady=8)
-        ttk.Button(buttons_frame, text="Guardar Cambios", command=self._on_guardar_cambios, style="Edit.TButton").grid(row=0, column=2, sticky="ew", padx=2, pady=4, ipady=8)
+        ttk.Button(buttons_frame, text="Guardar", command=self._on_guardar, style="Save.TButton").grid(row=0, column=0, sticky="ew", padx=2, pady=3, ipady=8)
+        ttk.Button(buttons_frame, text="Eliminar", command=self._on_eliminar, style="Delete.TButton").grid(row=0, column=1, sticky="ew", padx=2, pady=3, ipady=8)
+        ttk.Button(buttons_frame, text="Guardar Cambios", command=self._on_guardar_cambios, style="Edit.TButton").grid(row=0, column=2, sticky="ew", padx=2, pady=3, ipady=8)
 
         # Fila 2: Salir (centrado)
-        ttk.Button(buttons_frame, text="Salir", command=self._on_salir, style="Exit.TButton").grid(row=1, column=0, columnspan=3, sticky="ew", padx=2, pady=4, ipady=8)
+        ttk.Button(buttons_frame, text="Salir", command=self._on_salir, style="Exit.TButton").grid(row=1, column=0, columnspan=3, sticky="ew", padx=2, pady=3, ipady=8)
 
     def _build_tabla(self, parent: ttk.Frame) -> None:
         """Construye la tabla de usuarios."""
