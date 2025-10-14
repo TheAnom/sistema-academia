@@ -14,75 +14,112 @@ class LoginView(ttk.Frame):
         super().__init__(parent)
         self.on_success = on_success
 
-        # Los estilos de botones se configuran globalmente en main.py
+        # Configurar el fondo principal
+        self.configure(style="TFrame")
 
-        self._center_container = ttk.Frame(self)
-        self._center_container.place(relx=0.5, rely=0.5, anchor="center")
+        # Contenedor principal con diseño de tarjeta elevada
+        self._main_container = ttk.Frame(self, style="LoginCard.TFrame")
+        self._main_container.place(relx=0.5, rely=0.5, anchor="center")
+        
+        # Padding interno para la tarjeta
+        self._card_padding = ttk.Frame(self._main_container)
+        self._card_padding.pack(padx=40, pady=40)
 
-        # Imagen
-        self._image_label = ttk.Label(self._center_container)
-        self._image_label.pack(pady=(0, 8))
+        # Imagen/Logo
+        self._image_label = ttk.Label(self._card_padding)
+        self._image_label.pack(pady=(0, 20))
         self._load_image()
 
-        # Título
-        ttk.Label(self._center_container, text="Login", font=("Segoe UI", 24, "bold")).pack(pady=(0, 8))
+        # Título principal
+        title_label = ttk.Label(self._card_padding, text="Sistema Académico", style="Title.TLabel")
+        title_label.pack(pady=(0, 8))
+        
+        # Subtítulo
+        subtitle_label = ttk.Label(self._card_padding, text="Iniciar Sesión", style="Subtitle.TLabel")
+        subtitle_label.pack(pady=(0, 30))
 
-        # Inputs
-        self.entry_usuario = ttk.Entry(self._center_container, width=25, font=("Segoe UI", 16))
-        self._init_placeholder(self.entry_usuario, "Usuario")
-        self.entry_usuario.pack(pady=6, ipady=10)
+        # Contenedor para los campos de entrada
+        self._fields_container = ttk.Frame(self._card_padding)
+        self._fields_container.pack(fill=tk.X, pady=(0, 20))
 
-        self.entry_contrasena = ttk.Entry(self._center_container, width=25, show="", font=("Segoe UI", 16))
-        self._init_placeholder(self.entry_contrasena, "Contrasena")
-        self.entry_contrasena.pack(pady=6, ipady=10)
+        # Campo de usuario
+        user_label = ttk.Label(self._fields_container, text="Usuario:", style="TLabel")
+        user_label.pack(anchor="w", pady=(0, 5))
+        
+        self.entry_usuario = ttk.Entry(self._fields_container, width=30, style="Login.TEntry")
+        self._init_placeholder(self.entry_usuario, "Ingrese su usuario")
+        self.entry_usuario.pack(fill=tk.X, pady=(0, 15), ipady=12)
 
-        # Botones
-        btns = ttk.Frame(self._center_container)
-        btns.pack(fill=tk.X, pady=(8, 0))
-        # Centrado horizontal
-        btns.columnconfigure(0, weight=1)
-        btns.columnconfigure(1, weight=1)
-        ttk.Button(btns, text="Ingresar", command=self._on_ingresar, style="Save.TButton").grid(row=0, column=0, sticky="ew", padx=(0, 6), ipady=8)
-        ttk.Button(btns, text="Salir", command=self._on_salir, style="Exit.TButton").grid(row=0, column=1, sticky="ew", ipady=8)
+        # Campo de contraseña
+        password_label = ttk.Label(self._fields_container, text="Contraseña:", style="TLabel")
+        password_label.pack(anchor="w", pady=(0, 5))
+        
+        self.entry_contrasena = ttk.Entry(self._fields_container, width=30, show="", style="Login.TEntry")
+        self._init_placeholder(self.entry_contrasena, "Ingrese su contraseña")
+        self.entry_contrasena.pack(fill=tk.X, pady=(0, 20), ipady=12)
+
+        # Contenedor para botones
+        self._buttons_container = ttk.Frame(self._card_padding)
+        self._buttons_container.pack(fill=tk.X)
+        
+        # Configurar columnas para centrar botones
+        self._buttons_container.columnconfigure(0, weight=1)
+        self._buttons_container.columnconfigure(1, weight=1)
+
+        # Botones con mejor espaciado
+        login_btn = ttk.Button(self._buttons_container, text="Iniciar Sesión", 
+                              command=self._on_ingresar, style="Save.TButton")
+        login_btn.grid(row=0, column=0, sticky="ew", padx=(0, 10), ipady=12)
+
+        exit_btn = ttk.Button(self._buttons_container, text="Salir", 
+                             command=self._on_salir, style="Exit.TButton")
+        exit_btn.grid(row=0, column=1, sticky="ew", ipady=12)
+
+        # Mensaje de bienvenida
+        welcome_label = ttk.Label(self._card_padding, 
+                                 text="Bienvenido al Sistema de Gestión Académica", 
+                                 style="Subtitle.TLabel")
+        welcome_label.pack(pady=(20, 0))
 
     def _load_image(self) -> None:
         try:
             # Cargar PNG simple con PhotoImage (soporta GIF/PGM/PPM/PNG en Tcl 8.6+)
             if Path("login/logo-inicio-sesion.png").exists():
                 self._photo = tk.PhotoImage(file="login/logo-inicio-sesion.png")
-                # Redimensionar a ~100x100 manteniendo lo posible
+                # Redimensionar a ~120x120 manteniendo proporciones
                 try:
                     w, h = self._photo.width(), self._photo.height()
                     if w > 0 and h > 0:
-                        scale_w = max(1, round(w / 280))
-                        scale_h = max(1, round(h / 280))
+                        # Calcular escala para que la imagen sea aproximadamente 120x120
+                        scale_w = max(1, round(w / 120))
+                        scale_h = max(1, round(h / 120))
                         self._photo = self._photo.subsample(scale_w, scale_h)
                 except Exception:
                     pass
                 self._image_label.configure(image=self._photo)
             else:
-                # Si no existe la imagen, mostrar un placeholder
-                self._image_label.configure(text="👤", font=("Arial", 48))
+                # Si no existe la imagen, mostrar un icono educativo más elegante
+                self._image_label.configure(text="🎓", font=("Segoe UI Emoji", 64))
         except Exception as e:
-            # En caso de error, mostrar placeholder
-            self._image_label.configure(text="👤", font=("Arial", 48))
+            # En caso de error, mostrar icono educativo
+            self._image_label.configure(text="🎓", font=("Segoe UI Emoji", 64))
 
     def _init_placeholder(self, entry: ttk.Entry, placeholder: str) -> None:
         entry.insert(0, placeholder)
-        entry.configure(foreground="#888")
+        entry.configure(foreground="#6b7280")  # Color gris más suave
 
         def on_focus_in(event: tk.Event) -> None:
             if entry.get() == placeholder:
                 entry.delete(0, tk.END)
-                entry.configure(foreground="#000")
-                if placeholder.lower().startswith("contrasena"):
+                entry.configure(foreground="#1f2937")  # Color de texto principal
+                if "contraseña" in placeholder.lower() or "contrasena" in placeholder.lower():
                     entry.configure(show="*")
 
         def on_focus_out(event: tk.Event) -> None:
             if not entry.get():
                 entry.insert(0, placeholder)
-                entry.configure(foreground="#888")
-                if placeholder.lower().startswith("contrasena"):
+                entry.configure(foreground="#6b7280")  # Color gris suave
+                if "contraseña" in placeholder.lower() or "contrasena" in placeholder.lower():
                     entry.configure(show="")
 
         entry.bind("<FocusIn>", on_focus_in)
@@ -92,24 +129,24 @@ class LoginView(ttk.Frame):
         """Limpia los campos de usuario y contraseña."""
         # Limpiar campo de usuario
         self.entry_usuario.delete(0, tk.END)
-        self.entry_usuario.insert(0, "Usuario")
-        self.entry_usuario.configure(foreground="#888")
+        self.entry_usuario.insert(0, "Ingrese su usuario")
+        self.entry_usuario.configure(foreground="#6b7280")
         
         # Limpiar campo de contraseña
         self.entry_contrasena.delete(0, tk.END)
-        self.entry_contrasena.insert(0, "Contrasena")
-        self.entry_contrasena.configure(foreground="#888", show="")
+        self.entry_contrasena.insert(0, "Ingrese su contraseña")
+        self.entry_contrasena.configure(foreground="#6b7280", show="")
 
     def _on_ingresar(self) -> None:
         usuario = self.entry_usuario.get().strip()
         contrasena = self.entry_contrasena.get().strip()
         # Si aún están los placeholders, tratar como vacío
-        if usuario.lower() == "usuario":
+        if usuario.lower() in ["usuario", "ingrese su usuario"]:
             usuario = ""
-        if contrasena.lower() == "contrasena":
+        if contrasena.lower() in ["contrasena", "contraseña", "ingrese su contraseña"]:
             contrasena = ""
         if not usuario or not contrasena:
-            messagebox.showerror("Error", "Ingrese usuario y contraseña")
+            messagebox.showerror("Error", "Por favor, ingrese usuario y contraseña")
             return
         user_id = authenticate_user(usuario, contrasena, "academia.db")
         if user_id is not None:
@@ -118,9 +155,9 @@ class LoginView(ttk.Frame):
             self.on_success(user_id)
         else:
             # Feedback visual y diálogo
-            self.entry_usuario.configure(foreground="#b00")
-            self.entry_contrasena.configure(foreground="#b00")
-            messagebox.showerror("Credenciales inválidas", "Usuario o contraseña incorrectos")
+            self.entry_usuario.configure(foreground="#ef4444")  # Rojo de error
+            self.entry_contrasena.configure(foreground="#ef4444")  # Rojo de error
+            messagebox.showerror("Credenciales inválidas", "Usuario o contraseña incorrectos. Por favor, verifique sus datos.")
 
     def _on_salir(self) -> None:
         self.winfo_toplevel().destroy()

@@ -71,37 +71,236 @@ def create_main_window() -> tk.Tk:
     except:
         pass
     
-    # Configurar colores del sistema
+    # Configurar colores del sistema con paleta educativa profesional
     style = ttk.Style()
     
-    # Configurar solo fuente para las pestañas - sin colores de fondo
-    style.configure("TNotebook.Tab", font=("Segoe UI", 10))
+    # Paleta de colores para institución educativa
+    # Azul institucional (principal)
+    PRIMARY_BLUE = "#1e3a8a"      # Azul profundo institucional
+    LIGHT_BLUE = "#3b82f6"        # Azul claro para acentos
+    SOFT_BLUE = "#dbeafe"         # Azul muy claro para fondos
     
-    # Configurar colores para frames principales
-    style.configure("TFrame", background="#333")
+    # Verde académico (secundario)
+    ACADEMIC_GREEN = "#059669"    # Verde académico
+    LIGHT_GREEN = "#10b981"       # Verde claro
+    SOFT_GREEN = "#d1fae5"        # Verde muy claro
     
-    # Configurar colores para labels
-    style.configure("TLabel", background="#333", foreground="white", font=("Segoe UI", 9))
+    # Grises profesionales
+    DARK_GRAY = "#1f2937"         # Gris oscuro para fondos
+    MEDIUM_GRAY = "#4b5563"       # Gris medio
+    LIGHT_GRAY = "#f3f4f6"        # Gris claro para fondos
+    WHITE = "#ffffff"             # Blanco puro
     
-    # Configurar solo fuente para botones - sin colores de fondo
-    style.configure("TButton", font=("Segoe UI", 9))
-    style.configure("Delete.TButton", font=("Segoe UI", 9))
-    style.configure("Save.TButton", font=("Segoe UI", 9))
-    style.configure("Edit.TButton", font=("Segoe UI", 9))
-    style.configure("Exit.TButton", font=("Segoe UI", 9))
-    style.configure("Logout.TButton", font=("Segoe UI", 9))
-    style.configure("Info.TButton", font=("Segoe UI", 9))
-    style.configure("Large.TButton", font=("Segoe UI", 9))
+    # Colores de estado
+    SUCCESS_GREEN = "#10b981"     # Verde éxito
+    WARNING_ORANGE = "#f59e0b"    # Naranja advertencia
+    ERROR_RED = "#ef4444"         # Rojo error
+    INFO_BLUE = "#3b82f6"         # Azul información
     
-    # Configurar solo fuente para entries - sin colores de fondo
-    style.configure("TEntry", font=("Segoe UI", 9))
+    # Configurar tema base
+    style.theme_use('clam')
     
-    # Configurar solo fuente para comboboxes - sin colores de fondo
-    style.configure("TCombobox", font=("Segoe UI", 9))
+    # Configurar pestañas con estilo educativo
+    style.configure("TNotebook", background=SOFT_BLUE, borderwidth=0)
+    style.configure("TNotebook.Tab", 
+                   background=LIGHT_GRAY, 
+                   foreground=DARK_GRAY,
+                   font=("Segoe UI", 10, "bold"),
+                   padding=[20, 10])
+    style.map("TNotebook.Tab",
+              background=[('selected', PRIMARY_BLUE),
+                         ('active', LIGHT_BLUE)],
+              foreground=[('selected', WHITE),
+                         ('active', WHITE)])
     
-    # Configurar solo fuente para treeviews (tablas) - sin colores de fondo
-    style.configure("Treeview", font=("Segoe UI", 9))
-    style.configure("Treeview.Heading", font=("Segoe UI", 9, "bold"))
+    # Configurar frames principales
+    style.configure("TFrame", background=SOFT_BLUE)
+    style.configure("Card.TFrame", 
+                   background=WHITE, 
+                   relief="solid", 
+                   borderwidth=2,
+                   bordercolor=PRIMARY_BLUE)
+    
+    # Frame especial para el login con efecto de elevación
+    style.configure("LoginCard.TFrame", 
+                   background=WHITE, 
+                   relief="raised", 
+                   borderwidth=3,
+                   bordercolor=LIGHT_BLUE)
+    
+    # Configurar labels con tipografía mejorada
+    style.configure("TLabel", 
+                   background=SOFT_BLUE, 
+                   foreground=DARK_GRAY, 
+                   font=("Segoe UI", 10))
+    style.configure("Title.TLabel", 
+                   background=SOFT_BLUE, 
+                   foreground=PRIMARY_BLUE, 
+                   font=("Segoe UI", 16, "bold"))
+    style.configure("Subtitle.TLabel", 
+                   background=SOFT_BLUE, 
+                   foreground=MEDIUM_GRAY, 
+                   font=("Segoe UI", 12))
+    
+    # Configurar botones con colores educativos
+    style.configure("TButton", 
+                   font=("Segoe UI", 10, "bold"),
+                   background=LIGHT_BLUE,
+                   foreground=WHITE,
+                   borderwidth=0,
+                   focuscolor='none',
+                   padding=[15, 8])
+    style.map("TButton",
+              background=[('active', PRIMARY_BLUE),
+                         ('pressed', PRIMARY_BLUE)])
+    
+    # Botón de guardar (verde académico)
+    style.configure("Save.TButton", 
+                   font=("Segoe UI", 10, "bold"),
+                   background=ACADEMIC_GREEN,
+                   foreground=WHITE,
+                   borderwidth=0,
+                   focuscolor='none',
+                   padding=[15, 8])
+    style.map("Save.TButton",
+              background=[('active', LIGHT_GREEN),
+                         ('pressed', LIGHT_GREEN)])
+    
+    # Botón de eliminar (rojo)
+    style.configure("Delete.TButton", 
+                   font=("Segoe UI", 10, "bold"),
+                   background=ERROR_RED,
+                   foreground=WHITE,
+                   borderwidth=0,
+                   focuscolor='none',
+                   padding=[15, 8])
+    style.map("Delete.TButton",
+              background=[('active', '#dc2626'),
+                         ('pressed', '#dc2626')])
+    
+    # Botón de editar (azul)
+    style.configure("Edit.TButton", 
+                   font=("Segoe UI", 10, "bold"),
+                   background=LIGHT_BLUE,
+                   foreground=WHITE,
+                   borderwidth=0,
+                   focuscolor='none',
+                   padding=[15, 8])
+    style.map("Edit.TButton",
+              background=[('active', PRIMARY_BLUE),
+                         ('pressed', PRIMARY_BLUE)])
+    
+    # Botón de salir (gris)
+    style.configure("Exit.TButton", 
+                   font=("Segoe UI", 10, "bold"),
+                   background=MEDIUM_GRAY,
+                   foreground=WHITE,
+                   borderwidth=0,
+                   focuscolor='none',
+                   padding=[15, 8])
+    style.map("Exit.TButton",
+              background=[('active', DARK_GRAY),
+                         ('pressed', DARK_GRAY)])
+    
+    # Botón de logout (naranja)
+    style.configure("Logout.TButton", 
+                   font=("Segoe UI", 10, "bold"),
+                   background=WARNING_ORANGE,
+                   foreground=WHITE,
+                   borderwidth=0,
+                   focuscolor='none',
+                   padding=[15, 8])
+    style.map("Logout.TButton",
+              background=[('active', '#d97706'),
+                         ('pressed', '#d97706')])
+    
+    # Botón de información (azul claro)
+    style.configure("Info.TButton", 
+                   font=("Segoe UI", 10, "bold"),
+                   background=INFO_BLUE,
+                   foreground=WHITE,
+                   borderwidth=0,
+                   focuscolor='none',
+                   padding=[15, 8])
+    style.map("Info.TButton",
+              background=[('active', PRIMARY_BLUE),
+                         ('pressed', PRIMARY_BLUE)])
+    
+    # Botón grande
+    style.configure("Large.TButton", 
+                   font=("Segoe UI", 12, "bold"),
+                   background=LIGHT_BLUE,
+                   foreground=WHITE,
+                   borderwidth=0,
+                   focuscolor='none',
+                   padding=[20, 12])
+    style.map("Large.TButton",
+              background=[('active', PRIMARY_BLUE),
+                         ('pressed', PRIMARY_BLUE)])
+    
+    # Configurar campos de entrada con estilo moderno
+    style.configure("TEntry", 
+                   font=("Segoe UI", 11),
+                   fieldbackground=WHITE,
+                   foreground=DARK_GRAY,
+                   borderwidth=2,
+                   relief="solid",
+                   padding=[10, 8])
+    style.map("TEntry",
+              focuscolor=[('!focus', LIGHT_BLUE)],
+              bordercolor=[('focus', PRIMARY_BLUE),
+                          ('!focus', LIGHT_GRAY)])
+    
+    # Estilo especial para campos de login
+    style.configure("Login.TEntry", 
+                   font=("Segoe UI", 12),
+                   fieldbackground=WHITE,
+                   foreground=DARK_GRAY,
+                   borderwidth=2,
+                   relief="solid",
+                   padding=[12, 10])
+    style.map("Login.TEntry",
+              focuscolor=[('!focus', LIGHT_BLUE)],
+              bordercolor=[('focus', PRIMARY_BLUE),
+                          ('!focus', '#d1d5db')])
+    
+    # Configurar comboboxes
+    style.configure("TCombobox", 
+                   font=("Segoe UI", 10),
+                   fieldbackground=WHITE,
+                   foreground=DARK_GRAY,
+                   borderwidth=2,
+                   relief="solid")
+    style.map("TCombobox",
+              focuscolor=[('!focus', LIGHT_BLUE)],
+              bordercolor=[('focus', PRIMARY_BLUE),
+                          ('!focus', LIGHT_GRAY)])
+    
+    # Configurar treeviews (tablas) con estilo profesional
+    style.configure("Treeview", 
+                   font=("Segoe UI", 10),
+                   background=WHITE,
+                   foreground=DARK_GRAY,
+                   fieldbackground=WHITE,
+                   borderwidth=1,
+                   relief="solid")
+    style.configure("Treeview.Heading", 
+                   font=("Segoe UI", 10, "bold"),
+                   background=PRIMARY_BLUE,
+                   foreground=WHITE,
+                   borderwidth=0,
+                   relief="flat")
+    style.map("Treeview.Heading",
+              background=[('active', LIGHT_BLUE)])
+    
+    # Configurar scrollbars
+    style.configure("TScrollbar", 
+                   background=LIGHT_GRAY,
+                   troughcolor=SOFT_BLUE,
+                   borderwidth=0,
+                   arrowcolor=MEDIUM_GRAY,
+                   darkcolor=LIGHT_GRAY,
+                   lightcolor=LIGHT_GRAY)
     
     # Maximiza/ajusta a pantalla disponible
     try:
